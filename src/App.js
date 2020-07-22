@@ -16,19 +16,15 @@ const App = (props) => {
 
   const [showPersons, setShowPersons] = useState(false);
 
-  const switchNameHandler = (newName) => {
-    setPersonsState({
-      persons: [
-        { name: newName, age: 21 },
-        { name: "Maria", age: 19 },
-      ],
-      // otherState: personsState.otherState
-    })
-  }
-
   const togglePersonsHandler = () => {
     const doesShow = showPersons;
     setShowPersons(!doesShow);
+  }
+
+  const deletePersonHandler = (personIndex) => {
+    const persons = [...personsState.persons];
+    persons.splice(personIndex, 1);
+    setPersonsState({persons: persons}); 
   }
 
   const nameChangeHandler = (event) => {
@@ -53,27 +49,14 @@ const App = (props) => {
   if (showPersons) {
     persons = (
       <div>
-        {personsState.persons.map(person => {
+        {personsState.persons.map((person, index) => {
           return (
-            <Person name={person.name} age={person.age}/>
+            <Person 
+              click={() => deletePersonHandler(index)}
+              name={person.name} 
+              age={person.age}/>
           )
         })}
-        {/* <Person
-          name={personsState.persons[0].name}
-          age={personsState.persons[0].age}
-        />
-        <Person
-          name={personsState.persons[1].name}
-          age={personsState.persons[1].age}
-          click={switchNameHandler.bind(this, 'Lucas!')}
-          changed={nameChangeHandler}
-        >
-          My Hobbies: Signing
-          </Person>
-          <Person
-            name={personsState.persons[2].name}
-            age={personsState.persons[2].age}
-          /> */}
       </div>
     )
   }
