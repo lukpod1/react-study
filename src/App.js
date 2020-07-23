@@ -4,6 +4,14 @@ import Person from "./Person/Person";
 
 const App = (props) => {
 
+  const style = {
+    backgroundColor: 'white',
+    font: 'inherit',
+    border: '1px solid blue',
+    padding: '8px',
+    cursor: 'pointer'
+  }
+
   const [personsState, setPersonsState] = useState({
     persons: [
       { id: '1', name: "João", age: 20 },
@@ -11,8 +19,6 @@ const App = (props) => {
       { id: '3', name: "José", age: 22 }
     ]
   })
-
-  // const [otherState, setOtherState] = useState('some other value');
 
   const [showPersons, setShowPersons] = useState(false);
 
@@ -27,23 +33,23 @@ const App = (props) => {
     setPersonsState({persons: persons}); 
   }
 
-  const nameChangeHandler = (event) => {
-    setPersonsState({
-      persons: [
-        { name: "Lucas", age: 21 },
-        { name: event.target.value, age: 18 }
-      ],
+  const nameChangeHandler = (event, id) => {
+    const personIndex = personsState.persons.findIndex(p => {
+      return p.id === id;
     })
-  }
 
-  const style = {
-    backgroundColor: 'white',
-    font: 'inherit',
-    border: '1px solid blue',
-    padding: '8px',
-    cursor: 'pointer'
-  }
+    const person = {
+      ...personsState.persons[personIndex]
+    };
 
+    person.name = event.target.value;
+
+    const persons = [...personsState.persons];
+    persons[personIndex] = person;
+
+    setPersonsState({persons: persons});
+  }
+  
   let persons = null;
 
   if (showPersons) {
@@ -55,7 +61,8 @@ const App = (props) => {
               click={() => deletePersonHandler(index)}
               name={person.name} 
               age={person.age}
-              key={person.id} 
+              key={person.id}
+              changed={(event) => nameChangeHandler(event, person.id)} 
             />
           )
         })}
